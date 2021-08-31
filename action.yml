@@ -1,0 +1,40 @@
+name: mortar-deploy-action
+description: |-
+  Github action for deploy a mortar project
+inputs:
+  nexus-url:
+    description: "Nexus URL where all the packages are published"
+    required: true
+    default: "nexus-repository-manager.nexus:8081"
+  nexus-user:
+    description: "Nexus User ID:PW that has permission to publish packages to maven and npm repositories"
+    required: true
+    default: ${{ secrets.NEXUS_DEPLOY_USERPASS }}
+  prod:
+    description: "is production or not"
+    required: true
+    default: "false"
+  path:
+    description: "path of mortar project"
+    required: false
+    default: "."
+  dry-run:
+    description: "dry run"
+    required: false
+    default: "false"
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    - run: mortar deploy -y --nexus-user=${{ inputs.nexus-user }} --nexus-url=${{ inputs.nexus-url }} --prod=${{ inputs.prod }} --config=${{ inputs.path }}/mortar.yaml --ecr-repository-region=ap-northeast-2 --ecr-repository-url=${{ steps.login-ecr.outputs.registry }} --dry-run=${{ inputs.dry-run }}
+      shell: bash
