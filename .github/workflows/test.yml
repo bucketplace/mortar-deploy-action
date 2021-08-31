@@ -15,7 +15,8 @@ jobs:
       with:
         repository: bucketplace/mortar-cli
         path: example/mortar
-    - uses: bucketplace/mortar-deploy-action
+    - name: testing
+      uses: ./
       with:
         dry-run: "true"
         
