@@ -22,10 +22,10 @@ inputs:
     description: "is production or not"
     required: true
     default: "false"
-  path:
-    description: "path of mortar project"
+  config:
+    description: "path of mortar config"
     required: false
-    default: "."
+    default: "./mortar.yaml"
   dry-run:
     description: "dry run"
     required: false
@@ -45,5 +45,5 @@ runs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
     - name: Mortar Deployment 
-      run: mortar deploy -y --nexus-user=${{ inputs.nexus-user }} --nexus-url=${{ inputs.nexus-url }} --prod=${{ inputs.prod }} --config=${{ inputs.path }}/mortar.yaml --ecr-repository-region=${{ inputs.aws-region }} --ecr-repository-url=${{ steps.login-ecr.outputs.registry }} --dry-run=${{ inputs.dry-run }}
+      run: mortar deploy -y --nexus-user=${{ inputs.nexus-user }} --nexus-url=${{ inputs.nexus-url }} --prod=${{ inputs.prod }} --config=${{ inputs.config }} --ecr-repository-region=${{ inputs.aws-region }} --ecr-repository-url=${{ steps.login-ecr.outputs.registry }} --dry-run=${{ inputs.dry-run }}
       shell: bash
