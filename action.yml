@@ -1,7 +1,16 @@
 name: mortar-deploy-action
-description: |-
-  Github action for deploy a mortar project
+description: Github action for deploy a mortar project
+author: 'robur <ho.doh@bucketplace.net>'
 inputs:
+  aws-access-key-id:
+    description: "AWS Access Key Id for ECR"
+    required: true
+  aws-secret-access-key:
+    description: "AWS Secret Access Key for ECR"
+    required: true
+  aws-region:
+    description: "AWS Region for ECR"
+    required: true
   nexus-url:
     description: "Nexus URL where all the packages are published"
     required: true
@@ -9,7 +18,6 @@ inputs:
   nexus-user:
     description: "Nexus User ID:PW that has permission to publish packages to maven and npm repositories"
     required: true
-    default: ${{ secrets.NEXUS_DEPLOY_USERPASS }}
   prod:
     description: "is production or not"
     required: true
@@ -30,11 +38,12 @@ runs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-northeast-2
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: ${{ inputs.aws-region }}
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-    - run: mortar deploy -y --nexus-user=${{ inputs.nexus-user }} --nexus-url=${{ inputs.nexus-url }} --prod=${{ inputs.prod }} --config=${{ inputs.path }}/mortar.yaml --ecr-repository-region=ap-northeast-2 --ecr-repository-url=${{ steps.login-ecr.outputs.registry }} --dry-run=${{ inputs.dry-run }}
+    - name: Mortar Deployment 
+      run: mortar deploy -y --nexus-user=${{ inputs.nexus-user }} --nexus-url=${{ inputs.nexus-url }} --prod=${{ inputs.prod }} --config=${{ inputs.path }}/mortar.yaml --ecr-repository-region=${{ inputs.aws-region }} --ecr-repository-url=${{ steps.login-ecr.outputs.registry }} --dry-run=${{ inputs.dry-run }}
       shell: bash
