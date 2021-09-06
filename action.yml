@@ -1,40 +1,53 @@
 name: mortar-deploy-action
-description: |-
-  Github action for deploy a mortar project
+description: Github action for deploy a mortar project
+author: 'robur <ho.doh@bucketplace.net>'
 inputs:
+  aws-access-key-id:
+    description: "AWS Access Key Id for ECR"
+    required: true
+  aws-secret-access-key:
+    description: "AWS Secret Access Key for ECR"
+    required: true
+  aws-region:
+    description: "AWS Region for ECR"
+    required: true
+    default: ap-northeast-2
   nexus-url:
     description: "Nexus URL where all the packages are published"
     required: true
-    default: "nexus-repository-manager.nexus:8081"
+    default: "http://nexus-repository-manager.nexus.svc.cluster.local:8081"
   nexus-user:
     description: "Nexus User ID:PW that has permission to publish packages to maven and npm repositories"
     required: true
-    default: ${{ secrets.NEXUS_DEPLOY_USERPASS }}
   prod:
     description: "is production or not"
     required: true
     default: "false"
-  path:
-    description: "path of mortar project"
+  config:
+    description: "path of mortar config"
     required: false
-    default: "."
+    default: "./mortar.yaml"
   dry-run:
-    description: "dry run"
+    description: "running deployment without actual publication"
     required: false
     default: "false"
+outputs:
+  app-version:
+    description: "version of deployed package and docker image(tag)"
+    value: ${{steps.mortar-deploy.outputs.version }}
 runs:
   using: "composite"
   steps:
-    - name: Checkout
-      uses: actions/checkout@v2
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-northeast-2
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: ${{ inputs.aws-region }}
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-    - run: mortar deploy -y --nexus-user=${{ inputs.nexus-user }} --nexus-url=${{ inputs.nexus-url }} --prod=${{ inputs.prod }} --config=${{ inputs.path }}/mortar.yaml --ecr-repository-region=ap-northeast-2 --ecr-repository-url=${{ steps.login-ecr.outputs.registry }} --dry-run=${{ inputs.dry-run }}
+    - name: Mortar Deployment 
+      id: mortar-deploy
+      run: mortar deploy -y --nexus-user="${{ inputs.nexus-user }}" --nexus-url="${{ inputs.nexus-url }}" --prod=${{ inputs.prod }} --config="${{ inputs.config }}" --ecr-repository-region=${{ inputs.aws-region }} --ecr-repository-url="${{ steps.login-ecr.outputs.registry }}" --dry-run=${{ inputs.dry-run }} --github
       shell: bash
