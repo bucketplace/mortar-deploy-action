@@ -11,6 +11,7 @@ inputs:
   aws-region:
     description: "AWS Region for ECR"
     required: true
+    default: ap-northeast-2
   nexus-url:
     description: "Nexus URL where all the packages are published"
     required: true
@@ -27,7 +28,7 @@ inputs:
     required: false
     default: "./mortar.yaml"
   dry-run:
-    description: "dry run"
+    description: "running deployment without actual publication"
     required: false
     default: "false"
 outputs:
