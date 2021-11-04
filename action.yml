@@ -28,7 +28,11 @@ inputs:
     required: false
     default: "./mortar.yaml"
   dry-run:
-    description: "running deployment without actual publication"
+    description: "runs the deployment without actual publication"
+    required: false
+    default: "false"
+  create-ecr-repo:
+    description: "creates ECR repository if it is not existed"
     required: false
     default: "false"
 outputs:
@@ -49,5 +53,5 @@ runs:
       uses: aws-actions/amazon-ecr-login@v1
     - name: Mortar Deployment 
       id: mortar-deploy
-      run: mortar deploy -y --nexus-user="${{ inputs.nexus-user }}" --nexus-url="${{ inputs.nexus-url }}" --prod=${{ inputs.prod }} --config="${{ inputs.config }}" --ecr-repository-region=${{ inputs.aws-region }} --ecr-repository-url="${{ steps.login-ecr.outputs.registry }}" --dry-run=${{ inputs.dry-run }} --github
+      run: mortar deploy -y --nexus-user="${{ inputs.nexus-user }}" --nexus-url="${{ inputs.nexus-url }}" --prod=${{ inputs.prod }} --config="${{ inputs.config }}" --ecr-repository-region=${{ inputs.aws-region }} --ecr-repository-url="${{ steps.login-ecr.outputs.registry }}" --dry-run=${{ inputs.dry-run }} --create-ecr-repo=${{ inputs.create-ecr-repo }} --github
       shell: bash
