@@ -72,7 +72,7 @@ runs:
         --ecr-repository-url="${{ steps.login-ecr.outputs.registry }}" \
         --dry-run=${{ inputs.dry-run }} \
         --create-ecr-repo=${{ inputs.create-ecr-repo }} \
-        --go-repo-s3-aws-access-id="${{ inputs.go-repo-s3-aws-access-id}} \
-        --go-repo-s3-aws-secret-key="${{ inputs.go-repo-s3-aws-secret-key}} \
+        --go-repo-s3-aws-access-id="${{ inputs.go-repo-s3-aws-access-id}}" \
+        --go-repo-s3-aws-secret-key="${{ inputs.go-repo-s3-aws-secret-key}}" \
         --github
       shell: bash
