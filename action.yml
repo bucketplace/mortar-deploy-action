@@ -35,6 +35,15 @@ inputs:
     description: "creates ECR repository if it is not existed"
     required: false
     default: "false"
+  go-repo-s3-aws-access-id:
+    description: "access ID of AWS credentials for golang repository bucket, if necessary"
+    required: false
+    default: ""
+  go-repo-s3-aws-secret-key:
+    description: "secret Key of AWS credentials for golang repository bucket, if necessary"
+    required: false
+    default: ""
+    
 outputs:
   app-version:
     description: "version of deployed package and docker image(tag)"
@@ -53,5 +62,17 @@ runs:
       uses: aws-actions/amazon-ecr-login@v1
     - name: Mortar Deployment 
       id: mortar-deploy
-      run: mortar deploy -y --nexus-user="${{ inputs.nexus-user }}" --nexus-url="${{ inputs.nexus-url }}" --prod=${{ inputs.prod }} --config="${{ inputs.config }}" --ecr-repository-region=${{ inputs.aws-region }} --ecr-repository-url="${{ steps.login-ecr.outputs.registry }}" --dry-run=${{ inputs.dry-run }} --create-ecr-repo=${{ inputs.create-ecr-repo }} --github
+      run: |
+        mortar deploy -y \
+        --nexus-user="${{ inputs.nexus-user }}" \
+        --nexus-url="${{ inputs.nexus-url }}" \
+        --prod=${{ inputs.prod }} \
+        --config="${{ inputs.config }}" \
+        --ecr-repository-region=${{ inputs.aws-region }} \
+        --ecr-repository-url="${{ steps.login-ecr.outputs.registry }}" \
+        --dry-run=${{ inputs.dry-run }} \
+        --create-ecr-repo=${{ inputs.create-ecr-repo }} \
+        --go-repo-s3-aws-access-id="${{ inputs.go-repo-s3-aws-access-id}} \
+        --go-repo-s3-aws-secret-key="${{ inputs.go-repo-s3-aws-secret-key}} \
+        --github
       shell: bash
