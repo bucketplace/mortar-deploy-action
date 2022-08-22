@@ -43,6 +43,10 @@ inputs:
     description: "secret Key of AWS credentials for golang repository bucket, if necessary"
     required: false
     default: ""
+  override-version:
+    description: "if it set, it overrides app version on the mortar.yaml file"
+    required: false
+    default: ""
     
 outputs:
   app-version:
@@ -74,5 +78,6 @@ runs:
         --create-ecr-repo=${{ inputs.create-ecr-repo }} \
         --go-repo-s3-aws-access-id="${{ inputs.go-repo-s3-aws-access-id}}" \
         --go-repo-s3-aws-secret-key="${{ inputs.go-repo-s3-aws-secret-key}}" \
+        --override-version="${{ inputs.override-version }}" \
         --github
       shell: bash
