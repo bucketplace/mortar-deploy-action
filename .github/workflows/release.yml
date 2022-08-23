@@ -1,0 +1,29 @@
+---
+name: "Release Mortar Deploy Action"
+
+on:
+  release:
+    types:
+      - "released"
+
+jobs:
+  update_major_tag:
+    name: "Update Major Tags"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/v}
+      - name: Parse semver string
+        id: semver_parser
+        uses: booxmedialtd/ws-action-parse-semver@v1
+        with:
+          input_string: ${{ steps.get_version.outputs.VERSION }}
+      - name: push Major Tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ steps.semver_parser.outputs.major }}
