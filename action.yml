@@ -47,7 +47,11 @@ inputs:
     description: "if it set, it overrides app version on the mortar.yaml file"
     required: false
     default: ""
-    
+  build-args:
+    description: "Docker build; --build-args {key}={value},{key}={value},{key}={value}"
+    required: false
+    default: ""
+
 outputs:
   app-version:
     description: "version of deployed package and docker image(tag)"
@@ -64,7 +68,7 @@ runs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-    - name: Mortar Deployment 
+    - name: Mortar Deployment
       id: mortar-deploy
       run: |
         mortar deploy -y \
@@ -79,5 +83,6 @@ runs:
         --go-repo-s3-aws-access-id="${{ inputs.go-repo-s3-aws-access-id}}" \
         --go-repo-s3-aws-secret-key="${{ inputs.go-repo-s3-aws-secret-key}}" \
         --override-version="${{ inputs.override-version }}" \
+        --build-args="${{ inputs.build-args }}" \
         --github
       shell: bash
