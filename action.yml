@@ -47,8 +47,8 @@ inputs:
     description: "if it set, it overrides app version on the mortar.yaml file"
     required: false
     default: ""
-  build-args:
-    description: "Docker build; --build-args {key}={value},{key}={value},{key}={value}"
+  override-image-build-args:
+    description: "Docker build; --override-image-build-args {key}={value},{key}={value},{key}={value}"
     required: false
     default: ""
 
@@ -83,6 +83,6 @@ runs:
         --go-repo-s3-aws-access-id="${{ inputs.go-repo-s3-aws-access-id}}" \
         --go-repo-s3-aws-secret-key="${{ inputs.go-repo-s3-aws-secret-key}}" \
         --override-version="${{ inputs.override-version }}" \
-        --build-args="${{ inputs.build-args }}" \
+        --override-image-build-args="${{ inputs.override-image-build-args }}" \
         --github
       shell: bash
