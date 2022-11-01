@@ -52,6 +52,19 @@ outputs:
   app-version:
     description: "version of deployed package and docker image(tag)"
     value: ${{steps.mortar-deploy.outputs.version }}
+  app-name:
+    description: "version of deployed package and docker image(tag)"
+    value: ${{steps.mortar-deploy.outputs.app-name }}
+  namespace:
+    description: "version of deployed package and docker image(tag)"
+    value: ${{steps.mortar-deploy.outputs.namespace }}
+  owner:
+    description: "version of deployed package and docker image(tag)"
+    value: ${{steps.mortar-deploy.outputs.owner }}
+  repo-name:
+    description: "version of deployed package and docker image(tag)"
+    value: ${{steps.mortar-deploy.outputs.repo-name }}
+  
 runs:
   using: "composite"
   steps:
