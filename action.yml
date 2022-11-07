@@ -66,6 +66,8 @@ runs:
       uses: aws-actions/amazon-ecr-login@v1
     - name: Mortar Deployment 
       id: mortar-deploy
+      env:
+        DEBUG: true
       run: |
         mortar deploy -y \
         --nexus-user="${{ inputs.nexus-user }}" \
