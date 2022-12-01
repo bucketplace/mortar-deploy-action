@@ -1,4 +1,4 @@
-labels:
+labeler:
   - name: team/corepl
     color: '336699'
 
