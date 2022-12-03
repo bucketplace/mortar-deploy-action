@@ -1,6 +1,6 @@
 name: mortar-deploy-action
 description: Github action for deploy a mortar project
-author: "robur <ho.doh@bucketplace.net>"
+author: 'robur <ho.doh@bucketplace.net>'
 inputs:
   aws-access-key-id:
     description: "AWS Access Key Id for ECR"
@@ -64,9 +64,7 @@ outputs:
   repo-name:
     description: "repository name where the image has deployed"
     value: ${{steps.mortar-deploy.outputs.repo-name }}
-  image-tag:
-    description: "image tag of deployed docker image"
-    value: ${{steps.mortar-deploy.outputs.repo-name}}:${{steps.mortar-deploy.outputs.version}}
+  
 runs:
   using: "composite"
   steps:
@@ -79,20 +77,7 @@ runs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-    - name: Extract App name
-      id: extract-app-name
-      uses: mikefarah/yq@master
-      with:
-        cmd: yq '.name' ${{inputs.config}}
-    - name: Set Cache Env
-      shell: bash
-      run: |
-        APPNAME="${{ steps.extract-app-name.outputs.result }}"
-        BASEDIR="/var/cache/${APPNAME}"
-        echo "GRADLE_USER_HOME=${BASEDIR}/gradle" >> $GITHUB_ENV
-        echo "YARN_CACHE_FOLDER=${BASEDIR}/yarn" >> $GITHUB_ENV
-        echo "GOMODCACHE=${BASEDIR}/go" >> $GITHUB_ENV
-    - name: Mortar Deployment
+    - name: Mortar Deployment 
       id: mortar-deploy
       env:
         DEBUG: true
