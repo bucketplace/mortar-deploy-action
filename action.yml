@@ -1,6 +1,6 @@
 name: mortar-deploy-action
 description: Github action for deploy a mortar project
-author: "robur <ho.doh@bucketplace.net>"
+author: "Core Platform <eng-core-platform@bucketplace.net>"
 inputs:
   aws-access-key-id:
     description: "AWS Access Key Id for ECR"
@@ -64,9 +64,6 @@ outputs:
   repo-name:
     description: "repository name where the image has deployed"
     value: ${{steps.mortar-deploy.outputs.repo-name }}
-  image-tag:
-    description: "image tag of deployed docker image"
-    value: ${{steps.mortar-deploy.outputs.repo-name}}:${{steps.mortar-deploy.outputs.version}}
 runs:
   using: "composite"
   steps:
@@ -84,8 +81,8 @@ runs:
       uses: mikefarah/yq@master
       with:
         cmd: yq '.name' ${{inputs.config}}
-    - name: Pre-Process Build Cache
-      id: pre-cache
+    - name: Load Build Cache
+      id: load-build-cache
       uses: bucketplace/ci/.github/actions/load-build-cache@latest
       with:
         app-name: ${{ steps.extract-app-name.outputs.result }}
@@ -108,9 +105,8 @@ runs:
         --override-version="${{ inputs.override-version }}" \
         --github
       shell: bash
-    - name: Post-Process Build Cache
-      if: always() && steps.pre-cache.outcome == 'success'
-      id: post-cache
+    - name: Store Build Cache
+      id: store-build-cache
       uses: bucketplace/ci/.github/actions/store-build-cache@latest
       with:
         app-name: ${{ steps.extract-app-name.outputs.result }}
