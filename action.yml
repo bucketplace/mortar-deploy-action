@@ -15,7 +15,7 @@ inputs:
   nexus-url:
     description: "Nexus URL where all the packages are published"
     required: true
-    default: "http://nexus.co-workerhou.se"
+    default: "https://nexus.co-workerhou.se"
   nexus-user:
     description: "Nexus User ID:PW that has permission to publish packages to maven and npm repositories"
     required: true
