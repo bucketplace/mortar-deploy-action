@@ -68,7 +68,7 @@ runs:
   using: "composite"
   steps:
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v2
       with:
         aws-access-key-id: ${{ inputs.aws-access-key-id }}
         aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
@@ -89,7 +89,7 @@ runs:
     - name: Mortar Deployment
       id: mortar-deploy
       env:
-        DEBUG: true
+        DEBUG: "true"
       run: |
         mortar deploy -y \
         --nexus-user="${{ inputs.nexus-user }}" \
