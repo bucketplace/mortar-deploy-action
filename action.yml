@@ -48,7 +48,7 @@ inputs:
     required: false
     default: ""
   gradle-opts:
-    description: "if it set, it overwrites recommend gradle opts (-Xmx128m -Dorg.gradle.jvmargs='-Xmx1g -XX:MaxPermSize=64m')
+    description: "if it set, it overwrites recommend gradle opts (-Xmx128m -Dorg.gradle.jvmargs='-Xmx1g -XX:MaxPermSize=64m')"
     required: false
     default: "-Xmx128m -Dorg.gradle.jvmargs='-Xmx1g -XX:MaxPermSize=64m'"
     
