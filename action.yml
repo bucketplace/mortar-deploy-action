@@ -19,8 +19,8 @@ inputs:
   nexus-user:
     description: "Nexus User ID:PW that has permission to publish packages to maven and npm repositories"
     required: true
-  ops-monster-token:
-    description: "Ops Monster Token for user"
+  mortar-opsmonster-token:
+    description: "Mortar OpsMonster Token"
     required: true
   prod:
     description: "is production or not"
@@ -102,7 +102,7 @@ runs:
         mortar deploy -y \
         --nexus-user="${{ inputs.nexus-user }}" \
         --nexus-url="${{ inputs.nexus-url }}" \
-        --ops-monster-token="${{ inputs.ops-monster-token }}" \
+        --mortar-opsmonster-token="${{ inputs.mortar-opsmonster-token }}" \
         --prod=${{ inputs.prod }} \
         --config="${{ inputs.config }}" \
         --ecr-repository-region=${{ inputs.aws-region }} \
