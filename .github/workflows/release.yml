@@ -22,6 +22,7 @@ jobs:
         with:
           input_string: ${{ steps.get-version.outputs.version }}
       - name: Delete Major.Minor Tag
+        continue-on-error: true
         uses: dev-drprasad/delete-tag-and-release@v1.0
         with:
           tag_name: "v${{ steps.semver-parser.outputs.major }}.${{ steps.semver-parser.outputs.minor }}"
@@ -34,6 +35,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_tag: "${{ steps.semver-parser.outputs.major }}.${{ steps.semver-parser.outputs.minor }}"
       - name: delete Major Tag
+        continue-on-error: true
         uses: dev-drprasad/delete-tag-and-release@v1.0
         with:
           tag_name: "v${{ steps.semver-parser.outputs.major }}"
@@ -47,6 +49,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_tag: ${{ steps.semver-parser.outputs.major }}
       - name: delete Latest Tag
+        continue-on-error: true
         uses: dev-drprasad/delete-tag-and-release@v1.0
         with:
           tag_name: latest
