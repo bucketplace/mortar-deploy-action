@@ -1,0 +1,37 @@
+name: Setup Mortar
+
+on:
+  issues:
+    types:
+      - created
+  push:
+    branches:
+      - main
+
+jobs:
+  read-yaml:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - uses: chrisdickinson/setup-yq@latest
+      - name: Extract Mortar Version
+        id: extract-mortar-version
+        run: |
+          version=$(yq '.MyAppVersion' "${{ inputs.config }}")
+          if [ -z "$version" ]; then
+            echo "MyAppVersion is null. Setting a default value for testing."
+            version="default_testing_value"
+          fi
+          echo "MyAppVersion=$version" >> $GITHUB_OUTPUT
+        shell: bash
+      - name: Pull Mortar build image
+        run: |
+          docker pull hub.co-workerhou.se/platform/mortar-build:${{ steps.extract-mortar-version.outputs.mortarVersion }}
+      - name: Mount Mortar Remote
+        run: |
+          docker run --interactive --tty -e TERM=xterm-256color -e DEBUG=true \
+          --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock --name mortar_cli \
+          --user=root --rm --mount type=bind,source=${{ inputs.config }},target=/app \
+          hub.co-workerhou.se/platform/mortar-build:${{ steps.extract-mortar-version.outputs.mortarVersion }} \
+          

@@ -93,6 +93,10 @@ runs:
       uses: bucketplace/ci/.github/actions/load-build-cache@latest
       with:
         app-name: ${{ steps.extract-app-name.outputs.result }}
+    - name: Setup Mortar
+      uses: bucketplace/ci/.github/actions/setup-mortar@latest
+      with:
+        config: ${{ inputs.config }}
     - name: Mortar Deployment
       id: mortar-deploy
       env:
