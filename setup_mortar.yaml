@@ -1,4 +1,4 @@
-name: Setup Mortar
+name: setup-mortar
 
 on:
   issues:
@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  read-yaml:
+  read_yaml_pull_image:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
