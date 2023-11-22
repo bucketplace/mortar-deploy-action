@@ -98,8 +98,9 @@ runs:
       env:
         GRADLE_OPTS: ${{ inputs.gradle-opts }}
         DEBUG: "true"
+        NO_TTY: "1"
       run: |
-        mortar deploy -y --NO_TTY=1 \
+        mortar deploy -y \
         --nexus-user="${{ inputs.nexus-user }}" \
         --nexus-url="${{ inputs.nexus-url }}" \
         --ops-monster-token="${{ inputs.ops-monster-token }}" \
