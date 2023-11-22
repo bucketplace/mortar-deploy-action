@@ -99,7 +99,7 @@ runs:
         GRADLE_OPTS: ${{ inputs.gradle-opts }}
         DEBUG: "true"
       run: |
-        mortar deploy -y \
+        mortar deploy -y --NO_TTY=1 \
         --nexus-user="${{ inputs.nexus-user }}" \
         --nexus-url="${{ inputs.nexus-url }}" \
         --ops-monster-token="${{ inputs.ops-monster-token }}" \
