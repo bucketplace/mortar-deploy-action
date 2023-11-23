@@ -86,7 +86,7 @@ runs:
     - uses: chrisdickinson/setup-yq@latest
     - name: Extract App name
       id: extract-app-name
-      run: echo "js-workflow-sample-echo" >> "$GITHUB_OUTPUT"
+      run: echo result="$(yq '.name' ${{inputs.config}})" >> $GITHUB_OUTPUT
       shell: bash
     - name: Load Build Cache
       id: load-build-cache
