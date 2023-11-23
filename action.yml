@@ -100,7 +100,7 @@ runs:
         DEBUG: "true"
         NO_TTY: "1"
       run: |
-        mortar deploy -y \
+         mortar deploy -y \
         --nexus-user="${{ inputs.nexus-user }}" \
         --nexus-url="${{ inputs.nexus-url }}" \
         --ops-monster-token="${{ inputs.ops-monster-token }}" \
@@ -113,7 +113,6 @@ runs:
         --go-repo-s3-aws-access-id="${{ inputs.go-repo-s3-aws-access-id}}" \
         --go-repo-s3-aws-secret-key="${{ inputs.go-repo-s3-aws-secret-key}}" \
         --override-version="${{ inputs.override-version }}" \
-        --github
       shell: bash
     - name: Store Build Cache
       id: store-build-cache
