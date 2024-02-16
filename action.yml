@@ -54,6 +54,10 @@ inputs:
     description: "if it set, it overwrites recommend gradle opts (-Xmx128m -Dorg.gradle.jvmargs='-Xmx1g')"
     required: false
     default: "-Xmx128m -Dorg.gradle.jvmargs='-Xmx1g'"
+  stub-only:
+    description: "deploy only a grpc stubs, not the packages or docker"
+    required: false
+    default: false
 
 outputs:
   app-version:
@@ -113,6 +117,7 @@ runs:
         --go-repo-s3-aws-access-id="${{ inputs.go-repo-s3-aws-access-id}}" \
         --go-repo-s3-aws-secret-key="${{ inputs.go-repo-s3-aws-secret-key}}" \
         --override-version="${{ inputs.override-version }}" \
+        --stub-only=${{ inputs.stub-only }} \
         --github
       shell: bash
     - name: Store Build Cache
