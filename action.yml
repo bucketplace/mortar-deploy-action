@@ -57,7 +57,7 @@ inputs:
   stub-only:
     description: "deploy only a grpc stubs, not the packages or docker"
     required: false
-    default: false
+    default: "false"
 
 outputs:
   app-version:
